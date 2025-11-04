@@ -14,7 +14,7 @@ function App() {
     setFollows([]);
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/follows?username=${username}`);
+      const res = await fetch(`https://hightools-backend-production.up.railway.app/api/follows?username=${username}`);
       const data = await res.json();
 
       if (!res.ok) {
