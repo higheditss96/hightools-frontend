@@ -1,54 +1,73 @@
 import React, { useState } from "react";
-import SearchBar from "./components/SearchBar";
-import FollowsGrid from "./components/FollowsGrid";
 import "./App.css";
 
 function App() {
-  const [follows, setFollows] = useState([]);
+  const [username, setUsername] = useState("");
+  const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleSearch = async (username) => {
+  const handleSearch = async () => {
     setError("");
-    setLoading(true);
-    setFollows([]);
+    setUserData(null);
 
     try {
-      const res = await fetch(`https://hightools-backend-production.up.railway.app/api/follows?username=${username}`);
+      const res = await fetch(
+        `https://hightools-backend-production.up.railway.app/api/follows?username=${username}`
+      );
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.detail || "An unknown error occurred.");
-      } else if (!data || data.length === 0) {
-        setError("No follows found for this user.");
-      } else {
-        setFollows(data);
+        throw new Error(data.detail || "User not found");
       }
+
+      setUserData(data);
     } catch (err) {
-      setError("Server not responding.");
-    } finally {
-      setLoading(false);
+      setError(err.message);
     }
   };
 
   return (
     <div className="App">
-      <h1 className="title">HIGHTOOLS</h1>
-      <p className="subtitle">See who you follow on Kick — and since when.</p>
+      <h1>HIGHTOOLS</h1>
+      <p>See who you follow on Kick — and since when.</p>
 
-      <SearchBar onSearch={handleSearch} />
+      <div className="search-box">
+        <input
+          type="text"
+          placeholder="Enter Kick username..."
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
 
-      {loading && <p className="loading">Loading...</p>}
       {error && <p className="error">{error}</p>}
-      {!loading && follows.length > 0 && <FollowsGrid follows={follows} />}
 
-      <footer className="footer">
-  made by{" "}
-  <a href="https://kick.com/highman-edits" target="_blank" rel="noreferrer">
-    highman_edits
-  </a>{" "}
-  with <span>💚</span>
-</footer>
+      {userData && (
+        <div className="user-card">
+          <img
+            src={
+              userData.profile_pic
+                ? `https://files.kick.com${userData.profile_pic}`
+                : "https://via.placeholder.com/100"
+            }
+            alt="Profile"
+            className="avatar"
+          />
+          <h2>{userData.username}</h2>
+          <p>{userData.bio || "No bio available"}</p>
+          <p>
+            <strong>Followers:</strong> {userData.followers || 0}
+          </p>
+          <p>
+            <strong>Country:</strong> {userData.country || "Unknown"}
+          </p>
+        </div>
+      )}
+
+      <footer>
+        made by <span className="author">highman_edits</span> with 💚
+      </footer>
     </div>
   );
 }
