@@ -1,4 +1,4 @@
-/* === Base layout === */
+/* === Base === */
 body {
   background: linear-gradient(180deg, #0a0a0a, #121212);
   color: #eaeaea;
@@ -10,13 +10,12 @@ body {
   flex-direction: column;
 }
 
-/* === App container === */
+/* === App Layout === */
 .App {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
 }
 
 /* === Logo === */
@@ -26,17 +25,15 @@ body {
   background: linear-gradient(90deg, #00ff9d, #00ffaa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: fadeIn 0.6s ease-in;
 }
 
-/* === Search Section === */
+/* === Search === */
 .search-section {
   margin-top: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  animation: fadeIn 0.7s ease-in;
 }
 
 .search-section input {
@@ -68,14 +65,15 @@ body {
 }
 
 .search-section button:hover {
-  background: #00ff9d;
   transform: scale(1.05);
+  box-shadow: 0 0 20px #00ffaa40;
 }
 
 /* === Profile Card === */
 .profile-card {
   margin-top: 40px;
-  animation: fadeIn 0.8s ease-in;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in;
 }
 
 .avatar {
@@ -85,14 +83,39 @@ body {
   height: 100px;
 }
 
-/* === Grid for follows === */
+.profile-link {
+  color: #00ffaa;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+  color: #00ffcc;
+}
+
+.bio {
+  color: #aaa;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.followers {
+  color: #00ffaa;
+  margin-top: 8px;
+}
+
+/* === Grid === */
 .grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
   margin-top: 30px;
-  padding-bottom: 100px; /* prevent overlap with footer */
+  padding-bottom: 100px;
 }
 
 .follow-card {
@@ -103,7 +126,6 @@ body {
   width: 120px;
   text-align: center;
   transition: 0.3s ease;
-  animation: fadePop 0.4s ease;
 }
 
 .follow-card:hover {
@@ -118,24 +140,23 @@ body {
   object-fit: cover;
 }
 
-.follow-card p {
+.follow-card a {
+  display: block;
   margin-top: 8px;
-  font-size: 0.9rem;
+  color: #00ffaa;
+  text-decoration: none;
 }
 
-/* === Error text === */
-.error {
-  color: #ff6b6b;
-  margin-top: 20px;
+.follow-card a:hover {
+  color: #00ffcc;
 }
 
-/* === Loading Spinner === */
+/* === Spinner === */
 .spinner {
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-top: 50px;
   animation: fadeIn 0.4s ease-in;
 }
 
@@ -147,17 +168,16 @@ body {
   height: 55px;
   animation: spin 1s linear infinite;
   margin-bottom: 12px;
-  box-shadow: 0 0 15px rgba(0, 255, 170, 0.2);
 }
 
-.spinner p {
-  color: #00ffaa;
+/* === Error === */
+.error {
+  color: #ff6b6b;
+  margin-top: 25px;
   font-weight: 500;
-  font-size: 1rem;
-  text-shadow: 0 0 8px rgba(0, 255, 170, 0.4);
 }
 
-/* === Footer (fixed bottom) === */
+/* === Footer === */
 footer {
   width: 100%;
   text-align: center;
@@ -179,7 +199,7 @@ footer {
 
 .author:hover {
   text-decoration: underline;
-  color: #00ff9d;
+  color: #00ffcc;
 }
 
 /* === Animations === */
@@ -200,36 +220,5 @@ footer {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes fadePop {
-  0% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* === Responsive === */
-@media (max-width: 600px) {
-  .logo {
-    font-size: 2.3rem;
-  }
-
-  .search-section input {
-    width: 180px;
-  }
-
-  .follow-card {
-    width: 100px;
-  }
-
-  .follow-card img {
-    width: 70px;
-    height: 70px;
   }
 }

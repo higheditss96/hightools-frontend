@@ -1,43 +1,36 @@
 import React, { useState } from "react";
 import "./App.css";
 
+const API_BASE = "https://hightools-backend-production.up.railway.app";
+
 function App() {
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [follows, setFollows] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const API_BASE = "https://hightools-backend-production.up.railway.app";
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!username) return;
     setLoading(true);
     setError("");
     setUserData(null);
     setFollows([]);
 
-    fetch(`${API_BASE}/follows?username=${username}`)
-      .then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(
-            data?.detail || data?.message || "Request failed. Try again later."
-          );
-        }
-        return data;
-      })
-      .then((data) => {
-        setUserData(data.user);
-        setFollows(data.follows || []);
-        if (!data.follows || data.follows.length === 0) {
-          setError("No follows found (private or hidden).");
-        } else {
-          setError("");
-        }
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+    try {
+      const res = await fetch(`${API_BASE}/follows?username=${username}`);
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data?.detail || "Failed to fetch");
+
+      setUserData(data.user);
+      setFollows(data.follows || []);
+      if (data.message) setError(data.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,7 +40,7 @@ function App() {
       <div className="search-section">
         <input
           type="text"
-          placeholder="Search Kick username..."
+          placeholder="Enter Kick username..."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -62,20 +55,35 @@ function App() {
         </div>
       )}
 
-      {error && !loading && <p className="error">{error}</p>}
-
       {userData && !loading && (
         <div className="profile-card">
           <img
             src={
-              userData.user?.profile_pic
-                ? `https://files.kick.com${userData.user.profile_pic}`
+              userData.profile_pic
+                ? userData.profile_pic
                 : "https://via.placeholder.com/100"
             }
-            alt={userData.slug}
+            alt="avatar"
             className="avatar"
           />
-          <h2>{userData.slug}</h2>
+          <h2>
+            <a
+              href={`https://kick.com/${userData.slug || username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="profile-link"
+            >
+              {userData.slug || username}
+            </a>
+          </h2>
+          <p className="bio">
+            {userData.bio
+              ? userData.bio
+              : "No bio available. (Public Kick data only)"}
+          </p>
+          <p className="followers">
+            👥 Followers: {userData.followers_count || "N/A"}
+          </p>
         </div>
       )}
 
@@ -88,16 +96,30 @@ function App() {
                 <img
                   src={
                     ch.profile_pic
-                      ? `https://files.kick.com${ch.profile_pic}`
+                      ? ch.profile_pic
                       : "https://via.placeholder.com/80"
                   }
                   alt={ch.username}
                 />
-                <p>{ch.username}</p>
+                <a
+                  href={`https://kick.com/${ch.username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {ch.username}
+                </a>
               </div>
             ))}
           </div>
         </>
+      )}
+
+      {!loading && error && (
+        <p className="error">
+          {error.includes("privată")
+            ? "⚠️ Kick a făcut lista de follows privată — date limitate disponibile."
+            : error}
+        </p>
       )}
 
       <footer>
