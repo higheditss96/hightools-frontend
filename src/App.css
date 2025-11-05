@@ -21,23 +21,46 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-.login-btn {
+/* === Search Section === */
+.search-section {
+  margin-top: 40px;
+}
+
+.search-section input {
+  background: #111;
+  color: #eaeaea;
+  border: 1px solid #00ffaa60;
+  border-radius: 10px;
+  padding: 12px 18px;
+  width: 240px;
+  margin-right: 10px;
+  outline: none;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+.search-section input:focus {
+  border-color: #00ffaa;
+  box-shadow: 0 0 8px #00ffaa50;
+}
+
+.search-section button {
   background: linear-gradient(90deg, #00ff9d, #00ffaa);
   color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 25px;
   font-weight: 600;
-  padding: 15px 35px;
-  border-radius: 12px;
-  text-decoration: none;
-  margin-top: 40px;
-  display: inline-block;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-.login-btn:hover {
+.search-section button:hover {
+  background: #00ff9d;
   transform: scale(1.05);
-  box-shadow: 0 0 20px #00ffaa70;
 }
 
+/* === Profile === */
 .profile-card {
   margin-top: 40px;
 }
@@ -49,6 +72,7 @@ body {
   height: 100px;
 }
 
+/* === Follows Grid === */
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -79,57 +103,7 @@ body {
   object-fit: cover;
 }
 
-.search-section {
-  margin-top: 40px;
-}
-
-.search-section input {
-  background: #111;
-  color: #eaeaea;
-  border: 1px solid #00ffaa60;
-  border-radius: 10px;
-  padding: 10px 15px;
-  width: 220px;
-  margin-right: 10px;
-  outline: none;
-  transition: 0.3s;
-}
-
-.search-section input:focus {
-  border-color: #00ffaa;
-  box-shadow: 0 0 8px #00ffaa50;
-}
-
-.search-section button {
-  background: #00ffaa;
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.search-section button:hover {
-  background: #00ff9d;
-  transform: scale(1.05);
-}
-
-.compare-section {
-  margin-top: 40px;
-}
-
-.highlight {
-  color: #00ffaa;
-}
-
-.error {
-  color: #ff5555;
-  margin-top: 20px;
-  font-weight: 500;
-}
-
+/* === Footer === */
 footer {
   margin-top: auto;
   padding: 30px 0;
@@ -148,13 +122,14 @@ footer {
   color: #00ff9d;
 }
 
+/* === Responsive === */
 @media (max-width: 600px) {
   .logo {
     font-size: 2.3rem;
   }
 
-  .login-btn {
-    padding: 12px 25px;
+  .search-section input {
+    width: 180px;
   }
 
   .follow-card {
@@ -165,9 +140,4 @@ footer {
     width: 70px;
     height: 70px;
   }
-
-  .search-section input {
-    width: 180px;
-  }
 }
-

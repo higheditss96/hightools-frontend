@@ -5,16 +5,18 @@ function App() {
   const [username, setUsername] = useState("");
   const [userData, setUserData] = useState(null);
   const [follows, setFollows] = useState([]);
-  const [compareName, setCompareName] = useState("");
-  const [mutuals, setMutuals] = useState([]);
-  const [compareUser, setCompareUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const API_BASE = "https://hightools-backend-production.up.railway.app";
 
   const handleSearch = () => {
     if (!username) return;
+    setLoading(true);
     setError("");
+    setUserData(null);
+    setFollows([]);
+
     fetch(`${API_BASE}/follows?username=${username}`)
       .then((res) => res.json())
       .then((data) => {
@@ -22,98 +24,84 @@ function App() {
           setUserData(data.user);
           setFollows(data.follows);
         } else {
-          setError("User not found or no follows.");
+          setError("User not found or private profile.");
         }
       })
-      .catch(() => setError("Request failed."));
-  };
-
-  const handleCompare = () => {
-    if (!username || !compareName) return;
-    setError("");
-    fetch(`${API_BASE}/compare?user1=${username}&user2=${compareName}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.mutuals) {
-          setCompareUser(data.user2);
-          setMutuals(data.mutuals);
-        } else {
-          setError("No mutuals found.");
-        }
-      })
-      .catch(() => setError("Compare failed."));
+      .catch(() => setError("Request failed. Try again later."))
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className="App">
       <h1 className="logo">HIGHTOOLS</h1>
 
+      {/* === Search Bar === */}
       <div className="search-section">
         <input
           type="text"
-          placeholder="Enter Kick username"
+          placeholder="Search Kick username..."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
         <button onClick={handleSearch}>Search</button>
       </div>
 
+      {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
+      {/* === User Info === */}
       {userData && (
-        <>
-          <div className="profile-card">
-            <img
-              src={
-                userData.profile_pic
-                  ? `https://files.kick.com${userData.profile_pic}`
-                  : "https://via.placeholder.com/100"
-              }
-              alt={userData.username}
-              className="avatar"
-            />
-            <h2>{userData.username}</h2>
-          </div>
+        <div className="profile-card">
+          <img
+            src={
+              userData.profile_pic
+                ? `https://files.kick.com${userData.profile_pic}`
+                : "https://via.placeholder.com/100"
+            }
+            alt={userData.username}
+            className="avatar"
+          />
+          <h2>{userData.username}</h2>
+        </div>
+      )}
 
+      {/* === Follows Grid === */}
+      {follows.length > 0 && (
+        <>
           <h3>Following</h3>
           <div className="grid">
-            {follows.length > 0 ? (
-              follows.map((ch) => (
-                <div key={ch.id} className="follow-card">
-                  <img
-                    src={
-                      ch.profile_pic
-                        ? `https://files.kick.com${ch.profile_pic}`
-                        : "https://via.placeholder.com/80"
-                    }
-                    alt={ch.username}
-                  />
-                  <p>{ch.username}</p>
-                </div>
-              ))
-            ) : (
-              <p>No follows found.</p>
-            )}
+            {follows.map((ch) => (
+              <div key={ch.id} className="follow-card">
+                <img
+                  src={
+                    ch.profile_pic
+                      ? `https://files.kick.com${ch.profile_pic}`
+                      : "https://via.placeholder.com/80"
+                  }
+                  alt={ch.username}
+                />
+                <p>{ch.username}</p>
+              </div>
+            ))}
           </div>
+        </>
+      )}
 
-          <h3>Compare Follows</h3>
-          <div className="search-section">
-            <input
-              type="text"
-              placeholder="Compare with username"
-              value={compareName}
-              onChange={(e) => setCompareName(e.target.value)}
-            />
-            <button onClick={handleCompare}>Compare</button>
-          </div>
+      <footer>
+        made by{" "}
+        <a
+          href="https://kick.com/highman-edits"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="author"
+        >
+          highman_edits
+        </a>{" "}
+        with 💚
+      </footer>
+    </div>
+  );
+}
 
-          {compareUser && (
-            <div className="compare-section">
-              <h4>
-                <span className="highlight">{username}</span> &{" "}
-                <span className="highlight">{compareUser.username}</span> both follow:
-              </h4>
-              <div className="grid">
-                {mutuals.length > 0 ? (
-                  mutuals.map((ch) => (
-                    <div key={ch.id} className="follow-card">
+export default App;
