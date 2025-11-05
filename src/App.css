@@ -1,45 +1,185 @@
+/* === GLOBAL === */
 body {
-  background: linear-gradient(180deg, #0a0a0a 0%, #121212 100%);
-  color: #e0e0e0;
+  background: linear-gradient(180deg, #0a0a0a, #121212);
+  color: #eaeaea;
   font-family: "Poppins", sans-serif;
   text-align: center;
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+.App {
+  flex: 1;
+}
+
+/* === LOGO === */
 .logo {
-  margin-top: 60px;
+  margin-top: 40px;
   font-size: 3rem;
-  background: linear-gradient(90deg, #00ff9d, #00ffaa, #00ffb7);
+  background: linear-gradient(90deg, #00ff9d, #00ffaa);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 2px;
 }
 
-.subtitle {
-  margin-top: 5px;
-  color: #aaa;
-  font-weight: 300;
-}
-
-.search-container {
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.search-input {
-  padding: 12px 20px;
-  width: 280px;
-  border: 1px solid #00ffaa40;
+/* === LOGIN BUTTON === */
+.login-btn {
+  background: linear-gradient(90deg, #00ff9d, #00ffaa);
+  color: #000;
+  font-weight: 600;
+  padding: 15px 35px;
   border-radius: 12px;
-  background: #1a1a1a;
-  color: #fff;
-  font-size: 1rem;
+  text-decoration: none;
+  margin-top: 40px;
+  display: inline-block;
   transition: 0.3s;
 }
+
+.login-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00ffaa70;
+}
+
+/* === PROFILE CARD === */
+.profile-card {
+  margin-top: 40px;
+}
+
+.avatar {
+  border-radius: 50%;
+  border: 2px solid #00ffaa;
+  width: 100px;
+  height: 100px;
+}
+
+/* === FOLLOW GRID === */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.follow-card {
+  background: #1a1a1a;
+  border: 1px solid #00ffaa40;
+  border-radius: 15px;
+  padding: 10px;
+  width: 120px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.follow-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffaa40;
+}
+
+.follow-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* === SEARCH & COMPARE === */
+.search-section {
+  margin-top: 40px;
+}
+
+.search-section input {
+  background: #111;
+  color: #eaeaea;
+  border: 1px solid #00ffaa60;
+  border-radius: 10px;
+  padding: 10px 15px;
+  width: 220px;
+  margin-right: 10px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-section input:focus {
+  border-color: #00ffaa;
+  box-shadow: 0 0 8px #00ffaa50;
+}
+
+.search-section button {
+  background: #00ffaa;
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-section button:hover {
+  background: #00ff9d;
+  transform: scale(1.05);
+}
+
+.compare-section {
+  margin-top: 40px;
+}
+
+.highlight {
+  color: #00ffaa;
+}
+
+/* === ERROR TEXT === */
+.error {
+  color: #ff5555;
+  margin-top: 20px;
+  font-weight: 500;
+}
+
+/* === FOOTER === */
+footer {
+  margin-top: auto;
+  padding: 30px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.author {
+  color: #00ffaa;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.author:hover {
+  text-decoration: underline;
+  color: #00ff9d;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  .logo {
+    font-size: 2.3rem;
+  }
+
+  .login-btn {
+    padding: 12px 25px;
+  }
+
+  .follow-card {
+    width: 100px;
+  }
+
+  .follow-card img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .search-section input {
+    width: 180px;
+  }
+}
+
 
 .search-input:focus {
   outline: none;
