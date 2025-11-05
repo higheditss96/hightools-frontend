@@ -18,16 +18,25 @@ function App() {
     setFollows([]);
 
     fetch(`${API_BASE}/follows?username=${username}`)
-      .then((res) => res.json())
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(
+            data?.detail || data?.message || "Request failed. Try again later."
+          );
+        }
+        return data;
+      })
       .then((data) => {
-        if (data.user) {
-          setUserData(data.user);
-          setFollows(data.follows);
+        setUserData(data.user);
+        setFollows(data.follows || []);
+        if (!data.follows || data.follows.length === 0) {
+          setError("No follows found (private or hidden).");
         } else {
-          setError("User not found or private profile.");
+          setError("");
         }
       })
-      .catch(() => setError("Request failed. Try again later."))
+      .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   };
 
@@ -35,7 +44,6 @@ function App() {
     <div className="App">
       <h1 className="logo">HIGHTOOLS</h1>
 
-      {/* === Search Bar === */}
       <div className="search-section">
         <input
           type="text"
@@ -47,27 +55,31 @@ function App() {
         <button onClick={handleSearch}>Search</button>
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className="error">{error}</p>}
-
-      {/* === User Info === */}
-      {userData && (
-        <div className="profile-card">
-          <img
-            src={
-              userData.profile_pic
-                ? `https://files.kick.com${userData.profile_pic}`
-                : "https://via.placeholder.com/100"
-            }
-            alt={userData.username}
-            className="avatar"
-          />
-          <h2>{userData.username}</h2>
+      {loading && (
+        <div className="spinner">
+          <div className="circle"></div>
+          <p>Loading...</p>
         </div>
       )}
 
-      {/* === Follows Grid === */}
-      {follows.length > 0 && (
+      {error && !loading && <p className="error">{error}</p>}
+
+      {userData && !loading && (
+        <div className="profile-card">
+          <img
+            src={
+              userData.user?.profile_pic
+                ? `https://files.kick.com${userData.user.profile_pic}`
+                : "https://via.placeholder.com/100"
+            }
+            alt={userData.slug}
+            className="avatar"
+          />
+          <h2>{userData.slug}</h2>
+        </div>
+      )}
+
+      {!loading && follows.length > 0 && (
         <>
           <h3>Following</h3>
           <div className="grid">
