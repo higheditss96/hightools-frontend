@@ -1,3 +1,4 @@
+/* === Base layout === */
 body {
   background: linear-gradient(180deg, #0a0a0a, #121212);
   color: #eaeaea;
@@ -9,10 +10,16 @@ body {
   flex-direction: column;
 }
 
+/* === App container === */
 .App {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
+/* === Logo === */
 .logo {
   margin-top: 40px;
   font-size: 3rem;
@@ -24,6 +31,10 @@ body {
 /* === Search Section === */
 .search-section {
   margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .search-section input {
@@ -32,8 +43,7 @@ body {
   border: 1px solid #00ffaa60;
   border-radius: 10px;
   padding: 12px 18px;
-  width: 240px;
-  margin-right: 10px;
+  width: 260px;
   outline: none;
   transition: 0.3s;
   font-size: 1rem;
@@ -60,7 +70,7 @@ body {
   transform: scale(1.05);
 }
 
-/* === Profile === */
+/* === Profile Card === */
 .profile-card {
   margin-top: 40px;
 }
@@ -72,13 +82,14 @@ body {
   height: 100px;
 }
 
-/* === Follows Grid === */
+/* === Grid for follows === */
 .grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
   margin-top: 30px;
+  padding-bottom: 100px; /* prevent overlap with footer */
 }
 
 .follow-card {
@@ -103,12 +114,24 @@ body {
   object-fit: cover;
 }
 
-/* === Footer === */
+/* === Error / Loading text === */
+.error {
+  color: #ff6b6b;
+  margin-top: 20px;
+}
+
+/* === Footer (fixed bottom) === */
 footer {
-  margin-top: auto;
-  padding: 30px 0;
+  width: 100%;
+  text-align: center;
   color: #666;
   font-size: 0.9rem;
+  padding: 20px 0;
+  border-top: 1px solid #222;
+  background: #0a0a0a;
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 
 .author {
