@@ -8,17 +8,18 @@ function App() {
   const [follows, setFollows] = useState([]);
   const [error, setError] = useState("");
 
-  // pentru comparare
   const [searchUser, setSearchUser] = useState("");
   const [compareUser, setCompareUser] = useState(null);
   const [mutuals, setMutuals] = useState([]);
 
-  // === 1️⃣ GET LOGIN URL ===
+  const API_BASE = "https://hightools-backend-production.up.railway.app";
+
+  // === 1️⃣ LOGIN URL ===
   useEffect(() => {
-    fetch("https://hightools-backend-production.up.railway.app/login")
+    fetch(`${API_BASE}/login`)
       .then((res) => res.json())
       .then((data) => setAuthUrl(data.auth_url))
-      .catch(() => setError("Cannot connect to backend."));
+      .catch(() => setError("Backend offline or misconfigured."));
   }, []);
 
   // === 2️⃣ HANDLE CALLBACK ===
@@ -26,9 +27,7 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     if (code) {
-      fetch(
-        `https://hightools-backend-production.up.railway.app/callback?code=${code}`
-      )
+      fetch(`${API_BASE}/callback?code=${code}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.access_token) {
@@ -45,9 +44,7 @@ function App() {
   // === 3️⃣ FETCH USER INFO ===
   useEffect(() => {
     if (token) {
-      fetch(
-        `https://hightools-backend-production.up.railway.app/me?token=${token}`
-      )
+      fetch(`${API_BASE}/me?token=${token}`)
         .then((res) => res.json())
         .then((data) => setUser(data))
         .catch(() => setError("Failed to load user info."));
@@ -57,9 +54,7 @@ function App() {
   // === 4️⃣ FETCH FOLLOWS ===
   useEffect(() => {
     if (user && token) {
-      fetch(
-        `https://hightools-backend-production.up.railway.app/follows?user_id=${user.id}&token=${token}`
-      )
+      fetch(`${API_BASE}/follows?user_id=${user.id}&token=${token}`)
         .then((res) => res.json())
         .then((data) => setFollows(data))
         .catch(() => setError("Failed to load follows."));
@@ -73,23 +68,18 @@ function App() {
     setMutuals([]);
     setError("");
 
-    fetch(
-      `https://hightools-backend-production.up.railway.app/user?username=${searchUser}&token=${token}`
-    )
+    fetch(`${API_BASE}/user?username=${searchUser}&token=${token}`)
       .then((res) => res.json())
       .then((data) => {
         if (data && data.id) {
           setCompareUser(data);
           fetch(
-            `https://hightools-backend-production.up.railway.app/compare?user1_id=${user.id}&user2_id=${data.id}&token=${token}`
+            `${API_BASE}/compare?user1_id=${user.id}&user2_id=${data.id}&token=${token}`
           )
             .then((res) => res.json())
             .then((result) => {
-              if (result.mutuals) {
-                setMutuals(result.mutuals);
-              } else {
-                setMutuals([]);
-              }
+              if (result.mutuals) setMutuals(result.mutuals);
+              else setMutuals([]);
             });
         } else {
           setError("User not found.");
