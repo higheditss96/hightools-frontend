@@ -60,7 +60,9 @@ function App() {
           <img
             src={
               userData.profile_pic
-                ? userData.profile_pic
+                ? userData.profile_pic.startsWith("/")
+                  ? `https://files.kick.com${userData.profile_pic}`
+                  : userData.profile_pic
                 : "https://via.placeholder.com/100"
             }
             alt="avatar"
@@ -96,7 +98,9 @@ function App() {
                 <img
                   src={
                     ch.profile_pic
-                      ? ch.profile_pic
+                      ? ch.profile_pic.startsWith("/")
+                        ? `https://files.kick.com${ch.profile_pic}`
+                        : ch.profile_pic
                       : "https://via.placeholder.com/80"
                   }
                   alt={ch.username}
